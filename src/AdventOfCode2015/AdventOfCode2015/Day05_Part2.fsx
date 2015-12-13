@@ -7,9 +7,14 @@ let (<&&>) f g x = f x && g x
 let atLeastPairAppearTwice (word : string) =
     seq { 0..word.Length-2 }
     |> Seq.exists (fun i -> 
-        let pair = word.Substring(i, 2)
-        let rest = word.Remove(i, 2)
-        rest.Contains pair)
+        let pair = [| word.[i]; word.[i+1] |]
+        [|
+            yield! word.[0..i-1]
+            yield! [| '-'; '-' |]
+            yield! word.[i+2..]
+        |]
+        |> Seq.windowed 2
+        |> Seq.exists ((=) pair))
 
 let atLeastOneRepeatedLetter (word : string) =
     seq { 0..word.Length-3}
