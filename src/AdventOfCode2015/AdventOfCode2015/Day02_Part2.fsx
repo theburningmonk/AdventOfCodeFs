@@ -11,7 +11,8 @@ let split (by : char) (x : string) =
 input
 |> split '\n'
 |> Array.map (split 'x' >> Array.map int)
-|> Array.sumBy (fun [| l; w; h |] ->
-    let area  = 2*l*w + 2*w*h + 2*h*l
-    let extra = List.min [ l*w; w*h; l*h ]
-    area + extra)
+|> Array.sumBy (fun ([| l; w; h |] as dim) ->
+    let [| l'; w' |] = (Array.sort dim).[0..1]
+    let wrap = l' + l' + w' + w'
+    let bow  = l * w * h
+    wrap + bow)

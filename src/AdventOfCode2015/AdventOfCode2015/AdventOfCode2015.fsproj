@@ -56,6 +56,7 @@
     <None Include="Day01_Part2.fsx" />
     <Compile Include="Day02.fs" />
     <None Include="Day02.fsx" />
+    <None Include="Day02_Part2.fsx" />
     <Compile Include="Day03.fs" />
     <None Include="Day03.fsx" />
     <None Include="Day04.fsx" />
