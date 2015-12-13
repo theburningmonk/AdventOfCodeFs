@@ -23,7 +23,6 @@ let noThese lst (word : string) =
     |> not
 
 input.Split('\n')
-|> Array.map (fun x -> x.Trim())
 |> Array.filter 
     (atLeast3Vowels <&&> 
      atLeast1Double <&&> 
