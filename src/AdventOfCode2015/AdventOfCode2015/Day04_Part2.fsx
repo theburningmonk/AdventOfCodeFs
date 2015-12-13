@@ -16,9 +16,8 @@ Seq.unfold (fun n -> Some (n+1, n+1)) 0
 |> Seq.filter (fun (_, bin) ->
     // take advantage of binary-to-hex conversion 
     // (4 bits = 1 hex decimal)
-    // first 5 hexdecimal = 0 means 
-    //      first 2 bytes == 0uy
-    //      3rd byte < 16uy
-    bin.[0] = 0uy && bin.[1] = 0uy && bin.[2] < 16uy)
+    // first 6 hexdecimal = 0 means 
+    //      first 3 bytes == 0uy
+    bin.[0] = 0uy && bin.[1] = 0uy && bin.[2] = 0uy)
 |> Seq.head
 |> fst
