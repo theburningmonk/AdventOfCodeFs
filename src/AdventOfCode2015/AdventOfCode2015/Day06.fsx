@@ -8,10 +8,17 @@ type Action = TurnOn | TurnOff | Toggle
 
 let parse (input : string) =
     let keywords = 
-        [| "turn off"; "turn on"; "toggle"; "through" |]
+        [| 
+           "turn off" 
+           "turn on" 
+           "toggle" 
+           "through" 
+        |]
     
     let [| start'; end' |] =
-        input.Split(keywords, StringSplitOptions.RemoveEmptyEntries)
+        input.Split(
+            keywords, 
+            StringSplitOptions.RemoveEmptyEntries)
         |> Array.map (fun x -> 
             x.Trim().Split(',')
             |> Array.map int
@@ -30,9 +37,12 @@ let perform (action, (startX, startY), (endX, endY)) =
     for x in startX..endX do
         for y in startY..endY do
             match action with
-            | TurnOn  -> lights.[x, y] <- true
-            | TurnOff -> lights.[x, y] <- false
-            | Toggle  -> lights.[x, y] <- not lights.[x, y]
+            | TurnOn  -> 
+                lights.[x, y] <- true
+            | TurnOff -> 
+                lights.[x, y] <- false
+            | Toggle  -> 
+                lights.[x, y] <- not lights.[x, y]
 
 input.Split '\n'
 |> Array.map parse
@@ -41,4 +51,6 @@ input.Split '\n'
 let mutable count = 0
 
 lights
-|> Array2D.iter (function | true -> count <- count + 1 | _ -> ())
+|> Array2D.iter (function 
+    | true -> count <- count + 1 
+    | _ -> ())
