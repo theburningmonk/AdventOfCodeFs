@@ -81,6 +81,9 @@
     <None Include="Day10_Part2.fsx" />
     <None Include="Day11.fsx" />
     <None Include="Day11_Part2.fsx" />
+    <Content Include="Day12_Input.txt" />
+    <None Include="Day12.fsx" />
+    <None Include="Day12_Part2.fsx" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
