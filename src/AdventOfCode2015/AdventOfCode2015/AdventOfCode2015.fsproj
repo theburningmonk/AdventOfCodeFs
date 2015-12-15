@@ -74,6 +74,9 @@
     <Content Include="Day08_Input.txt" />
     <None Include="Day08.fsx" />
     <None Include="Day08_Part2.fsx" />
+    <Compile Include="Day09.fs" />
+    <None Include="Day09.fsx" />
+    <None Include="Day09_Part2.fsx" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
