@@ -48,13 +48,11 @@ let facts =
         ("perfumes",    1)
     |]
 
-let find (aunts : AuntSue[]) =
-    aunts |> Array.filter (fun sue ->
-        facts |> Array.forall (fun (k, v) ->
-            match sue.Memories.TryFind k with
-            | None    -> true
-            | Some v' -> v = v'
-        )
+aunts 
+|> Array.filter (fun sue ->
+    facts |> Array.forall (fun (k, v) ->
+        match sue.Memories.TryFind k with
+        | None    -> true
+        | Some v' -> v = v'
     )
-
-find aunts
+)
