@@ -87,6 +87,9 @@
     <Compile Include="Day13.fs" />
     <None Include="Day13.fsx" />
     <None Include="Day13_Part2.fsx" />
+    <Compile Include="Day14.fs" />
+    <None Include="Day14.fsx" />
+    <None Include="Day14_Part2.fsx" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
