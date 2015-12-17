@@ -90,6 +90,9 @@
     <Compile Include="Day14.fs" />
     <None Include="Day14.fsx" />
     <None Include="Day14_Part2.fsx" />
+    <Compile Include="Day15.fs" />
+    <None Include="Day15.fsx" />
+    <None Include="Day15_Part2.fsx" />
     <Compile Include="Day16.fs" />
     <None Include="Day16.fsx" />
     <None Include="Day16_Part2.fsx" />
