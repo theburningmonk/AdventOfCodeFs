@@ -63,36 +63,37 @@ type Circuit =
 
 [<AutoOpen>]
 module Gates =
-    let AND wire1 wire2 = 
-        Binary (wire1, wire2, (fun x y -> 
+    let AND src1 src2 = 
+        Binary (src1, src2, (fun x y -> 
             match x, y with
             | Some x, Some y -> Some (x &&& y)
             | _ -> None))
 
-    let OR wire1 wire2 = 
-        Binary (wire1, wire2, (fun x y ->
+    let OR src1 src2 = 
+        Binary (src1, src2, (fun x y ->
             match x, y with
             | Some x, Some y -> Some (x ||| y)
             | _ -> None))
 
-    let LSHIFT n wire = 
-        Unary (wire, (fun x -> 
+    let LSHIFT n src = 
+        Unary (src, (fun x -> 
             x |> Option.bind (fun x' -> 
                 x' <<< n |> Some)))
 
-    let RSHIFT n wire = 
-        Unary (wire, (fun x ->
+    let RSHIFT n src = 
+        Unary (src, (fun x ->
             x |> Option.bind (fun x' ->
                 x' >>> n |> Some)))
 
-    let NOT wire = 
-        Unary (wire, (fun x ->
+    let NOT src = 
+        Unary (src, (fun x ->
             x |> Option.bind ((~~~) >> Some)))
 
 let circuit =
     input.Split '\n'
     |> Seq.fold (fun (circuit : Circuit) line ->
         match line with
+
         | Regex "NOT ([a-z]+) -> ([a-z]+)" 
                 [ in'; out ] ->
             circuit.Connect(
