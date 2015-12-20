@@ -44,9 +44,9 @@ let findPaths graph =
             if toGo.IsEmpty then
                 yield route
             else 
+                let conns = graph.Connections.[city]
                 let nextCities =
-                    toGo
-                    |> Set.filter graph.Connections.[city].ContainsKey
+                    toGo |> Set.filter conns.ContainsKey
 
                 for next in nextCities do
                     yield! traverse (next::route) (toGo.Remove next)

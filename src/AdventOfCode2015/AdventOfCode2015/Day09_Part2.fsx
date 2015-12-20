@@ -64,5 +64,5 @@ let calcDistance cities =
 
 findPaths graph 
 |> Array.ofSeq
-|> Array.maxBy calcDistance
-|> calcDistance
+|> Array.map calcDistance
+|> Array.max
