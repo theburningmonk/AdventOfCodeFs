@@ -19,4 +19,8 @@ let combine (sizes : int list) =
     
     loop sizes (0, [])
 
-combine sizes |> Seq.length
+let combos = combine sizes |> Seq.toArray
+let minLen = combos |> Array.map List.length |> Array.min
+combos
+|> Seq.filter (List.length >> (=) minLen)
+|> Seq.length
