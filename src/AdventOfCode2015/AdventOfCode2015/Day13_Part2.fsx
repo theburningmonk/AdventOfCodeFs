@@ -73,6 +73,4 @@ let score (arrangement : string[]) =
         connections.[a].[left] + connections.[a].[right])
     |> Array.sum
    
-arrangements 
-|> Seq.map score 
-|> Seq.max
+arrangements |> Seq.map score |> Seq.max
