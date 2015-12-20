@@ -5,8 +5,6 @@ let input =
     __SOURCE_DIRECTORY__ + "\Day12_Input.txt"
     |> File.ReadAllText
 
-let reds = Regex.Matches(input, ":\"red\"")
-
 // analogy for 'open' & 'close' is such that you start with
 // an open door behind you, you wanna find the matching door
 // in front of you to close (i.e. { and })
@@ -16,7 +14,7 @@ let findBoundary startingIdx dir open' close' =
     let rec loop idx dir acc =
         if acc = 0 then idx
         else
-            let idx = idx + dir
+            let idx  = idx + dir
             let char = input.[idx]
             if char = open' then loop idx dir (acc+1)
             elif char = close' then loop idx dir (acc-1)
@@ -28,7 +26,7 @@ let findBoundaryL idx = findBoundary idx -1 '}' '{'
 let findBoundaryR idx = findBoundary idx 1 '{' '}'
 
 let bounds = 
-    reds
+    Regex.Matches(input, ":\"red\"")
     |> Seq.cast<Match>
     |> Seq.map (fun m -> 
         let start' = findBoundaryL m.Index
@@ -37,8 +35,7 @@ let bounds =
         start', end')
     |> Seq.toArray
 
-let matches = Regex.Matches(input, "([-0-9]+)")
-matches 
+Regex.Matches(input, "([-0-9]+)") 
 |> Seq.cast<Match>
 |> Seq.filter (fun m ->
     not <| Array.exists (fun (start', end') ->

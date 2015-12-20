@@ -1,7 +1,5 @@
 ﻿let input = "hepxcrrq"
 
-let (<&&>) f g x = f x && g x
-
 let threeIncrLetters (pwd : string) =
     pwd 
     |> Seq.map int 
@@ -20,6 +18,8 @@ let atLeastTwoPairs (pwd : string) =
     |> Seq.distinct
     |> Seq.length
     |> fun n -> n >= 2
+
+let (<&&>) f g x = f x && g x
 
 let isValid = 
     threeIncrLetters <&&>
