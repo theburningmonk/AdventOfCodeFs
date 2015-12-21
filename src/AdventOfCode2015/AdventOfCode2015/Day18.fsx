@@ -38,4 +38,6 @@ let lights' =
     { 1..100 } |> Seq.fold (fun lights' _ -> step lights') lights
 
 let mutable count = 0
-lights' |> Array2D.iter (function | true -> count <- count + 1 | _ -> ())
+lights' |> Array2D.iter (function 
+    | true -> count <- count + 1 
+    | _ -> ())
