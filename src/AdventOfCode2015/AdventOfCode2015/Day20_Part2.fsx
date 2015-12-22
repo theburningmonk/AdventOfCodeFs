@@ -1,12 +1,12 @@
-﻿let findAllDivisors n =
+﻿let findDivisors n =
     let max = float n |> sqrt |> int
     { 1..max } 
     |> Seq.filter (fun n' -> n % n' = 0)
     |> Seq.collect (fun n' -> [ n'; n / n' ])
-    |> Seq.distinct
+    |> Seq.filter (fun n' -> n / n' <= 50)
     |> Seq.toArray
 
-let totalGifts = findAllDivisors >> Array.sumBy ((*) 10)
+let totalGifts = findDivisors >> Array.sumBy ((*) 11)
 
 let input = 29000000
 
