@@ -109,6 +109,7 @@
     <None Include="Day20_Part2.fsx" />
     <None Include="Day21.fsx" />
     <None Include="Day21_Part2.fsx" />
+    <None Include="Day22.fsx" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
