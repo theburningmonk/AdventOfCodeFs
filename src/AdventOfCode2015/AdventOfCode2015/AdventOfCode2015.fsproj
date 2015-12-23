@@ -51,6 +51,7 @@
   <Import Project="$(FSharpTargetsPath)" />
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
+    <Content Include="Day1Challenge.txt" />
     <Compile Include="Day01.fs" />
     <None Include="Day01.fsx" />
     <None Include="Day01_Part2.fsx" />
@@ -110,6 +111,7 @@
     <None Include="Day21.fsx" />
     <None Include="Day21_Part2.fsx" />
     <None Include="Day22.fsx" />
+    <None Include="Day22_Part2.fsx" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />

@@ -131,6 +131,7 @@ let (|IsGameOver|_|) { Player = player; Boss = boss } =
 
 let runSim player boss =
     let rec playerTurn game totalMana = 
+        let game = { game with Player = hitPlayer 1<HP> game.Player }
         match applyEffects game with
         | IsGameOver result -> 
             seq { yield result, totalMana }
