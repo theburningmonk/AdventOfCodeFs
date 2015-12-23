@@ -104,7 +104,7 @@ let equipmentCombos =
 
 let runSim boss you =
     let rec loop (attacker : Character) (defender : Character) =
-        let damage = max 0<HP> (attacker.Damage - defender.Armor)
+        let damage = max 1<HP> (attacker.Damage - defender.Armor)
         let newHP  = defender.HitPoints - damage
         if newHP <= 0<HP>
         then attacker.Name
