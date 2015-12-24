@@ -137,6 +137,9 @@
     <Compile Include="Day23.fs" />
     <None Include="Day23.fsx" />
     <None Include="Day23_Part2.fsx" />
+    <Content Include="Day24Challenge.txt" />
+    <Compile Include="Day24.fs" />
+    <None Include="Day24.fsx" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
