@@ -32,6 +32,7 @@ type Spell = Game -> Game
 
 [<AutoOpen>]
 module Spells =
+
     let private hitBoss damage (boss : Boss) =
         { boss with HitPoints = boss.HitPoints - damage }
 
@@ -112,7 +113,8 @@ let applyEffects game =
     // recursively apply the passive effects
     let player, boss =
         game.Effects
-        |> List.fold (fun x (_, effect, _) -> effect x) (player, boss)
+        |> List.fold (fun x (_, effect, _) -> 
+            effect x) (player, boss)
 
     let effects =
         game.Effects
@@ -130,6 +132,7 @@ let (|IsGameOver|_|) { Player = player; Boss = boss } =
     else None
 
 let runSim player boss =
+
     let rec playerTurn game totalMana = 
         match applyEffects game with
         | IsGameOver result -> 
