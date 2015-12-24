@@ -25,23 +25,23 @@ let instructions =
             | [| "jio"; r; offset |] -> Jio (r, int offset))
 
 let carryOut (instructions : Instruction[]) =
-    let rec loop idx (regs : Map<string, int>) = 
+    let rec loop idx (regs : Map<string, uint64>) = 
         if idx >= instructions.Length then regs
         else
             match instructions.[idx] with
-            | Hlf r -> loop (idx+1) <| regs.Add(r, regs.[r]/2)
-            | Tpl r -> loop (idx+1) <| regs.Add(r, regs.[r]*3)
-            | Inc r -> loop (idx+1) <| regs.Add(r, regs.[r]+1)
+            | Hlf r -> loop (idx+1) <| regs.Add(r, regs.[r]/2UL)
+            | Tpl r -> loop (idx+1) <| regs.Add(r, regs.[r]*3UL)
+            | Inc r -> loop (idx+1) <| regs.Add(r, regs.[r]+1UL)
             | Jmp offset -> loop (idx+offset) regs
             | Jie (r, offset) ->
-                if regs.[r] % 2 = 0 
+                if regs.[r] % 2UL = 0UL 
                 then loop (idx+offset) regs
                 else loop (idx+1) regs
             | Jio (r, offset) ->
-                if regs.[r] = 1
+                if regs.[r] = 1UL
                 then loop (idx+offset) regs
                 else loop (idx+1) regs
 
-    loop 0 <| Map.ofArray [| ("a", 0); ("b", 0) |]
+    loop 0 <| Map.ofArray [| ("a", 0UL); ("b", 0UL) |]
 
 (carryOut instructions).["b"]
