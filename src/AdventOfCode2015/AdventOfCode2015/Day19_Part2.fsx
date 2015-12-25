@@ -2,51 +2,42 @@
 
 open Day19
 open System
-open System.Text.RegularExpressions
 
-type InputKind =
-    | Replacement  of string * string
-    | Molecule     of string
+let string (chars : char seq) = new String(Seq.toArray chars)
 
-let split (by : string) (x : string) =
-    x.Split(
-        [| by |],
-        StringSplitOptions.RemoveEmptyEntries)
-
-let parse (input : string) =
-    match split " => " <| input.Trim() with
-    | [| from; to' |] -> Replacement (from, to')
-    | _ -> Molecule input 
-
-let replacements, [| Molecule(medicine) |] = 
-    split "\n" input 
+let lines =
+    input.Split '\n'
     |> Array.filter (not << String.IsNullOrWhiteSpace)
-    |> Array.map parse
-    |> Array.partition (function
-        | Replacement _ -> true 
-        | _ -> false)
 
-// work backwards compared to Part 1, i.e. given current 
-// string, which replacements could have given this
-let revert molecule =
-    replacements
-    |> Seq.collect (fun (Replacement (from, to')) ->
-        let regex = new Regex(to')
-        regex.Matches molecule
-        |> Seq.cast<Match>
-        |> Seq.map (fun m ->
-            molecule.[0..m.Index-1] + from + molecule.[m.Index+m.Length..]))
+let tokens =
+    lines
+    |> Seq.takeWhile (fun s -> s.Contains "=>")
+    |> Seq.map (fun s -> 
+        s.Split ' ' |> Seq.head |> Seq.rev |> string)
+    |> Set.ofSeq
 
-let answer =
-    let state = seq { yield 0, medicine }
+let molecule = 
+    (lines |> Seq.last)
+        .Replace("Rn", "(")
+        .Replace("Ar", ")")
+        .Replace("Y", ",")
+    |> Seq.rev
+    |> string
 
-    { 0..100 }
-    |> Seq.scan (fun molecules _ ->
-        molecules 
-        |> Seq.collect (fun (n, molecule) ->
-            revert molecule
-            |> Seq.map (fun m -> n+1, m))) state
-    |> Seq.collect id
-    |> Seq.filter (fun (_, molecule) -> molecule = "e")
-    |> Seq.head
-    |> fst
+let count (molecule : string) =
+    let rec loop (t, p, c) = function
+        | [] -> t, p, c
+        | '('::tl 
+        | ')'::tl -> 
+            loop (t+1, p+1, c) tl
+        | ','::tl ->
+            loop (t+1, p, c+1) tl
+        | hd::tl when tokens.Contains (string [hd]) ->
+            loop (t+1, p, c) tl
+        | hd1::hd2::tl when tokens.Contains (string [hd1; hd2]) ->
+            loop (t+1, p, c) tl
+
+    loop (0, 0, 0) (molecule |> Seq.toList)
+
+let t, p, c = count molecule
+let answer = t - p - 2*c - 1
