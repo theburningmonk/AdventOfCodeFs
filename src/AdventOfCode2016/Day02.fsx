@@ -12,5 +12,5 @@ let keypad =
 let between min max x = x >= min && x <= max
 let isValid (row, col) = row |> between 0 2 && col |> between 0 2
 
-let answer = solve isValid keypad
+let answer = solve isValid keypad (1, 1)
 printf "%A" answer

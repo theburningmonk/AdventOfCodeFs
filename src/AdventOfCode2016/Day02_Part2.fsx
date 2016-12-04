@@ -17,5 +17,5 @@ let isValid (row, col) =
   col |> between 0 4 &&
   keypad.[row].[col] <> None
 
-let answer = solve isValid keypad |> Array.map Option.get
+let answer = solve isValid keypad (2, 0) |> Array.map Option.get
 printf "%A" answer

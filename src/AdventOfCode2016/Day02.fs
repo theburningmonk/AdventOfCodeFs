@@ -19,7 +19,7 @@ let parse (input : string) =
     | 'R' -> R)
   )
 
-let solve validate (keypad : 'a[][]) = 
+let solve validate (keypad : 'a[][]) startPos = 
   let move (row, col) dir = 
     match dir with
     | U -> (row - 1, col)
@@ -31,7 +31,7 @@ let solve validate (keypad : 'a[][]) =
   let follow pos dirs = dirs |> Array.fold move pos
 
   parse input
-  |> Array.scan follow (1, 1)
+  |> Array.scan follow startPos
   |> Seq.skip 1
   |> Seq.map (fun (row, col) -> keypad.[row].[col])
   |> Seq.toArray
