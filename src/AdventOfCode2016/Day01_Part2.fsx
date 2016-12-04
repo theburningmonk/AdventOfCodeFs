@@ -1,22 +1,7 @@
 #load "Day01.fs"
 
 open System
-open System.IO
 open Day01
-
-type Direction = N | S | E | W
-type Turn = L | R
-
-let (|Instruction|) (input: string) = 
-  let dir = if input.[0] = 'L' then L else R
-  let n   = input.Substring(1) |> int
-  dir, n
-
-let turn = function 
-  | N, L | S, R -> W
-  | S, L | N, R -> E
-  | W, L | E, R -> S
-  | E, L | W, R -> N
 
 let move (x, y) n dir =
   { 1..n } 
