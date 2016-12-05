@@ -29,14 +29,10 @@ let between min max x = x >= min && x <= max
 
 let part2 =
   hashes
-  |> Seq.map (fun hash -> 
-    printfn "%A" hash
-    hash)
   |> Seq.choose (fun hash -> 
     match Int32.TryParse(hash.Substring(5, 1)) with 
-    | true, n -> Some (hash, n)
-    | _       -> None) 
-  |> Seq.filter (fun (hash, pos) -> pos |> between 0 7)
+    | true, n when n |> between 0 7 -> Some (hash, n)
+    | _ -> None) 
   |> Seq.scan (fun (hashes, positions : Set<int>) (hash, pos) -> 
       if positions.Contains pos 
       then (hash::hashes, positions.Remove pos)
