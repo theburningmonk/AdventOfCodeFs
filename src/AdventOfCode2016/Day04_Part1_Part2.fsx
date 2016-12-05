@@ -48,7 +48,8 @@ let decrypt (encryptedName : string) sectorId =
 
 let part2 = 
   realRooms
-  |> Array.map (fun (encryptedName, sectorId, _) -> 
+  |> Seq.map (fun (encryptedName, sectorId, _) -> 
     decrypt encryptedName sectorId, sectorId)
-  |> Array.filter (fst >> (=) "northpole object storage") 
-  |> Array.head
+  |> Seq.filter (fst >> (=) "northpole object storage") 
+  |> Seq.head
+  |> snd
