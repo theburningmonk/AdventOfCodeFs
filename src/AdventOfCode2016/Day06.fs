@@ -11,7 +11,7 @@ let solve sortBy =
   { 0..len-1 }
   |> Seq.map (fun idx -> input |> Array.map (fun line -> line.[idx]))
   |> Seq.map (fun col -> 
-    col 
+    col
     |> Seq.groupBy id 
     |> Seq.map (fun (c, cs) -> c, Seq.length cs)
     |> sortBy snd
