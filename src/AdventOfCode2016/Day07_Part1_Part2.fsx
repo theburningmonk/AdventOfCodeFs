@@ -44,8 +44,6 @@ let part2 =
     let ABAs = outsideBrackets |> Seq.collect getABAs |> Seq.distinct |> Seq.toArray
     match ABAs with
     | [||] -> false
-    | ToBABs BABs ->
-      if BABs.Length > 1 then printfn "%A" ABAs
-      (insideBrackets |> Seq.exists (hasBAB BABs))
+    | ToBABs BABs -> insideBrackets |> Seq.exists (hasBAB BABs)
   )
   |> Seq.length
