@@ -13,49 +13,27 @@ let (|Repeat|_|) (input : string) =
   | [| Int n; Int count |] -> Some (n, count)
   | _                      -> None
 
-let stitch (chars : char seq) = new String(chars |> Seq.toArray) 
-
-let rec decompressV1 (input : string) = 
-  seq {
-    // this will give you either
-    //    head(nxcount)rest => [| head; "nxcount"; rest |]
-    //    (nxcount)rest     => [| ""; "nxcount"; rest |]
-    //    text              => [| text |]
-    let parts = input.Split([| '('; ')' |], 3)
-
-    match parts with
-    | [| text |] -> yield bigint text.Length
+let decompressV1 input =
+  let rec loop (input : string) acc =
+    match input.Split([| '('; ')' |], 3) with
+    | [| text |] -> acc + text.Length
     | [| head; Repeat(n, count); rest |] ->
-      yield bigint head.Length
-      yield bigint n * bigint count
-      
-      yield! rest |> Seq.skip n |> stitch |> decompressV1
-  }
+      let acc = acc + head.Length + n * count
+      loop (rest.Substring n) acc
+    
+  loop input 0
 
-let rec decompressV2 (input : string) = 
-  seq {
-    // this will give you either
-    //    head(nxcount)rest => [| head; "nxcount"; rest |]
-    //    (nxcount)rest     => [| ""; "nxcount"; rest |]
-    //    text              => [| text |]
-    let parts = input.Split([| '('; ')' |], 3)
+let part1 = decompressV1 input
 
-    match parts with
-    | [| text |] -> yield bigint text.Length
+let rec decompressV2 input =
+  let rec loop (input : string) acc =
+    match input.Split([| '('; ')' |], 3) with
+    | [| text |] -> acc + int64 text.Length
     | [| head; Repeat(n, count); rest |] ->
-      yield bigint head.Length
-      
-      let repeatLength = 
-        rest 
-        |> Seq.take n
-        |> stitch
-        |> decompressV2
-        |> Seq.sum
-      
-      yield bigint count * repeatLength
+      let repeatLen = rest.Substring(0, n) |> decompressV2
+      let acc = acc + int64 head.Length + int64 count * repeatLen
+      loop (rest.Substring n) acc
+    
+  loop input 0L
 
-      yield! rest |> Seq.skip n |> stitch |> decompressV2
-  }
-
-let part1 = decompressV1 input |> Seq.reduce (+)
-let part2 = decompressV2 input |> Seq.reduce (+)
+let part2 = decompressV2 input
