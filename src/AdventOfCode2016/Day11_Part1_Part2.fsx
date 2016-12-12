@@ -15,15 +15,19 @@ type State =
     Floors   : Floor[]
   }
 
-let initFloors = 
-  [| 
-    set [ Generator "promethium"; Microchip "promethium" ]
-    set [ Generator "cobalt"; Generator "curium"; Generator "ruthenium"; Generator "plutonium" ]
-    set [ Microchip "cobalt"; Microchip "curium"; Microchip "ruthenium"; Microchip "plutonium" ]
-    set []
-  |]
+  override x.ToString() =
+    let byElement = 
+      x.Floors 
+      |> Seq.mapi (fun n items -> items |> Seq.map (fun i -> n, i))
+      |> Seq.collect id
+      |> Seq.groupBy (fun (_n, i) -> i.Element)
+      |> Seq.map (fun (_e, itemOnFloors) -> 
+        match itemOnFloors |> Seq.toArray with
+        | [| (i, Generator _); (j, _) |] -> i, j
+        | [| (i, Microchip _); (j, _) |] -> j, i)
+      |> Seq.sort
 
-let initState = { Elevator = 0; Floors = initFloors }
+    sprintf "%d-%s" x.Elevator <| System.String.Join("", byElement)
 
 let (|Empty|NotEmpty|) (floor : Floor) = 
   if floor.Count = 0 then Empty else NotEmpty
@@ -53,46 +57,46 @@ let (|Success|Failed|InProgress|) { Floors = floors } =
   | [| _; _; _; Fried _ |] -> Failed
   | _ -> InProgress
 
-open System.Collections.Generic
-let visitedStates = new HashSet<State>()
+let solve initState =
+  let visitedStates = new System.Collections.Generic.HashSet<string>()
 
-let next { Elevator = floorNum; Floors = floors } =
-  // all the different ways items can be loaded into the elevator
-  let itemCombos (floor : Floor) =
-    seq {
-      for item in floor do
-        yield set [ item ]
-        for otherItem in floor.Remove item do
-          yield set [ item; otherItem ]
+  let next { Elevator = floorNum; Floors = floors } =
+    // all the different ways items can be loaded into the elevator
+    let itemCombos (floor : Floor) =
+      seq {
+        for item in floor do
+          yield set [ item ]
+          for otherItem in floor.Remove item do
+            yield set [ item; otherItem ]
+      }
+      |> Seq.distinct
+
+    let moveItems oldFloor newFloor items =
+      let floors' = Array.copy floors
+      floors'.[oldFloor] <- Set.difference floors.[oldFloor] items
+      floors'.[newFloor] <- Set.union floors.[newFloor] items
+      floors'
+
+    seq { 
+      let floor = floors.[floorNum]
+      
+      for items in itemCombos floor do
+        if floorNum >= 1 then
+          let floorNum' = floorNum-1
+          let floors'   = moveItems floorNum floorNum' items
+          yield { Elevator = floorNum'; Floors = floors' }
+
+        if floorNum < 3 then
+          let floorNum' = floorNum+1
+          let floors'   = moveItems floorNum floorNum' items
+          yield { Elevator = floorNum'; Floors = floors' }
     }
-    |> Seq.distinct
+    |> Seq.filter (fun state -> visitedStates.Add(state.ToString()))
+    |> Seq.filter (function | Failed -> false | _ -> true)
 
-  let moveItems oldFloor newFloor items =
-    let floors' = Array.copy floors
-    floors'.[oldFloor] <- Set.difference floors.[oldFloor] items
-    floors'.[newFloor] <- Set.union floors.[newFloor] items
-    floors'
-
-  seq { 
-    let floor = floors.[floorNum]
-    
-    for items in itemCombos floor do
-      if floorNum >= 1 then
-        let floorNum' = floorNum-1
-        let floors'   = moveItems floorNum floorNum' items
-        yield { Elevator = floorNum'; Floors = floors' }
-
-      if floorNum < 3 then
-        let floorNum' = floorNum+1
-        let floors'   = moveItems floorNum floorNum' items
-        yield { Elevator = floorNum'; Floors = floors' }
-  }
-  |> Seq.filter (fun state -> visitedStates.Add(state))
-  |> Seq.filter (function | Failed -> false | _ -> true)
-
-let successMoves =
   (0, [| initState |])
   |> Seq.unfold (fun (moves, states) ->
+    printfn "has tried out %d states" visitedStates.Count
     let nextStates = states |> Seq.collect next |> Seq.toArray
     let nextItem = moves+1, nextStates
     Some (nextItem, nextItem))
@@ -100,7 +104,31 @@ let successMoves =
     let successStates = 
       states |> Array.filter (function | Success -> true | _ -> false)
     if successStates.Length > 0 then Some (moves, successStates) else None)
+  |> Seq.head
+  |> fst
 
-let part1 = successMoves |> Seq.head |> fst
+let initFloorsPart1 = 
+  [| 
+    set [ Generator "promethium"; Microchip "promethium" ]
+    set [ Generator "cobalt"; Generator "curium"; 
+          Generator "ruthenium"; Generator "plutonium" ]
+    set [ Microchip "cobalt"; Microchip "curium"; 
+          Microchip "ruthenium"; Microchip "plutonium" ]
+    set []
+  |]
 
-// successMoves |> Seq.take 10 |> Seq.toArray
+let part1 = solve <| { Elevator = 0; Floors = initFloorsPart1 }
+
+let initFloorsPart2 =
+  [| 
+    set [ Generator "promethium"; Microchip "promethium"; 
+          Generator "elerium";    Microchip "elerium";
+          Generator "dilithium";  Microchip "dilithium" ]
+    set [ Generator "cobalt"; Generator "curium"; 
+          Generator "ruthenium"; Generator "plutonium" ]
+    set [ Microchip "cobalt"; Microchip "curium"; 
+          Microchip "ruthenium"; Microchip "plutonium" ]
+    set []
+  |]
+
+let part2 = solve <| { Elevator = 0; Floors = initFloorsPart2 }
