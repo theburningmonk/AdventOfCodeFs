@@ -34,9 +34,7 @@ let execute initValues (inputs : string[]) =
         loop (idx+offset)
       | [| "jnz"; reg; Int offset |] ->
         match registers.TryGetValue reg with
-        | true, n when n <> 0 ->
-          // printfn "%A" (registers |> Seq.map (fun (KeyValue(k, v)) -> k, v) |> Seq.toArray)  
-          loop (idx+offset)
+        | true, n when n <> 0 -> loop (idx+offset)
         | _ -> loop (idx+1)
       | _ -> loop (idx+1)
 
