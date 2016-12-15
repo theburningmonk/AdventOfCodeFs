@@ -9,22 +9,9 @@ let input = "ahsbgdzn"
 
 let md5 = CryptoConfig.CreateFromName("MD5") :?> HashAlgorithm
 
-let memoize f =
-  let dict = new Dictionary<_,_>()
-  fun n ->
-    match dict.TryGetValue(n) with
-    | true, v -> v
-    | _ ->
-      let temp = f(n)
-      dict.Add(n, temp)
-      temp
-
-let hash = 
-  let f (input : string) =
-    let bytes = input |> Encoding.UTF8.GetBytes |> md5.ComputeHash
-    BitConverter.ToString(bytes).Replace("-", "").ToLower()
-
-  memoize f
+let hash (input : string) =
+  let bytes = input |> Encoding.UTF8.GetBytes |> md5.ComputeHash
+  BitConverter.ToString(bytes).Replace("-", "").ToLower()
 
 let inline findSequencesOf n (input : string) =
   input
