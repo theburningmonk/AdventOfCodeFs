@@ -27,7 +27,7 @@ let solve (hash : string -> string) =
 
   let sequencesOfFive = new Dictionary<char, int list>()
   hashes 
-  |> Seq.take 25000 
+  |> Seq.take 25000
   |> Seq.iter (fun (idx, h) ->
     findSequencesOf 5 h
     |> Seq.iter (fun c -> 
