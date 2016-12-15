@@ -13,7 +13,7 @@ let hash (input : string) =
   let bytes = input |> Encoding.UTF8.GetBytes |> md5.ComputeHash
   BitConverter.ToString(bytes).Replace("-", "").ToLower()
 
-let inline findSequencesOf n (input : string) =
+let findSequencesOf n (input : string) =
   input
   |> Seq.windowed n
   |> Seq.choose (fun chars -> 
