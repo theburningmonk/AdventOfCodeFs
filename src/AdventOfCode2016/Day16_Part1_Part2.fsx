@@ -25,8 +25,5 @@ let solve diskSize input =
 
   dragonCurve input |> calcCheckSum
 
-//00000100100001100   0.007
 let part1 = solve 272 input
-
-//00011010100010010   11.602
 let part2 = solve 35651584 input
