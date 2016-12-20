@@ -10,7 +10,7 @@ let part1 =
   let l = input - pown 2.0 (log2 input) |> int
   2 * l + 1
 
-let part2 input = 
+let part2 = 
   let n = log3 input
   let m = pown 3.0 n
   let l = input - m
