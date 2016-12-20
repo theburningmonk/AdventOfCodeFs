@@ -10,14 +10,14 @@ let part1 =
   let l = input - pown 2.0 (log2 input) |> int
   2 * l + 1
 
-let part2 = 
+let part2 input = 
   let n = log3 input
   let m = pown 3.0 n
   let l = input - m
 
-  if l <= m
-  then l |> int 
-  else (l - m) * 2.0 |> int
+  if l = 0.0 then m |> int
+  elif l <= m then l |> int 
+  else m + (l - m) * 2.0 |> int
 
 // type Elf = { N: int; mutable Gifts: int }
 
