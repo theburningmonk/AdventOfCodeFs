@@ -15,7 +15,7 @@ let part2 =
   let m = pown 3.0 n
   let l = input - m
 
-  if l < m
+  if l <= m
   then l |> int 
   else (l - m) * 2.0 |> int
 
