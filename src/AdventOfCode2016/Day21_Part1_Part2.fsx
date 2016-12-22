@@ -107,3 +107,26 @@ let part2 =
     match pwd |> apply instructions with
     | "fbgdceah" -> Some <| new String(pwd)
     | _ -> None)
+
+// Alternative solution for part 2
+let inverseRotateBasedOn char (input : char[]) =
+  { 1..input.Length }
+  |> Seq.map (fun n -> rotate Left n input)
+  |> Seq.filter (fun original -> rotateBasedOn char original = input)
+  |> Seq.head
+
+let applyInverse instructions input =
+  instructions
+  |> Array.rev
+  |> Array.fold (fun input inst -> 
+    match inst with
+    | SwapPos (src, dest) -> swapPos src dest input
+    | SwapLetter (x, y)   -> swapLetter x y input
+    | Rotate (Left, n)    -> rotate Right n input
+    | Rotate (Right, n)   -> rotate Left n input
+    | RotateBasedOn (x)   -> inverseRotateBasedOn x input
+    | Reverse (x, y)      -> reverse x y input
+    | Move (src, dest)    -> move dest src input) input
+  |> fun chars -> new String(chars)
+
+let part2 = "fbgdceah".ToCharArray() |> applyInverse instructions
