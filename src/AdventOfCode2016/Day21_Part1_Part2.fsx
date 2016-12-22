@@ -3,7 +3,6 @@ open System.IO
 open System.Text.RegularExpressions
 
 let input = File.ReadAllLines(__SOURCE_DIRECTORY__ + "/Day21Input.txt")
-let pwd = "abcdefgh"
 
 type Direction = Left | Right
 
@@ -91,7 +90,7 @@ let apply instructions input =
     | Move (src, dest)    -> move src dest input) input
   |> fun chars -> new String(chars)
 
-let part1 = pwd.ToCharArray() |> apply instructions
+let part1 = "abcdefgh".ToCharArray() |> apply instructions
 
 let rec insertions x = function
   | []             -> [[x]]
@@ -104,8 +103,7 @@ let rec permutations = function
 let part2 = 
   permutations [ 'a'..'h' ]
   |> Seq.map List.toArray
-  |> Seq.map (fun pwd -> pwd, pwd |> apply instructions)
-  |> Seq.filter (fun (pwd, scrambled) -> scrambled = "fbgdceah")
-  |> Seq.head
-  |> fst
-  |> fun chars -> new String(chars)
+  |> Seq.pick (fun pwd -> 
+    match pwd |> apply instructions with
+    | "fbgdceah" -> Some <| new String(pwd)
+    | _ -> None)
