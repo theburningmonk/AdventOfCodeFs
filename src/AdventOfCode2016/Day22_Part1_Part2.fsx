@@ -25,11 +25,10 @@ let nodes =
       Used     = int used
     })
 
-let byData  = nodes |> Array.sortBy (fun x -> x.Used)
 let byAvail = nodes |> Array.sortByDescending (fun x -> x.Size - x.Used)
 
 let part1 =
-  byData
+  nodes
   |> Seq.filter (fun x -> x.Used > 0)
   |> Seq.sumBy (fun x ->
     byAvail 
