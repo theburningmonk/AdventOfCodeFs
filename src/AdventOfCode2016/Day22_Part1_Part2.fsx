@@ -45,12 +45,8 @@ let grid = Array2D.init (maxX + 1) (maxY + 1) (fun x y ->
   nodes |> Array.find (fun n -> n.Position = (x, y)))
 
 let move (srcX, srcY) (destX, destY) (grid : Node[,]) =
-  printfn "moving (%d, %d) to (%d, %d)" srcX srcY destX destY
-
   let src  = grid.[srcX, srcY]
   let dest = grid.[destX, destY]
-
-  printfn "src [size %d, used %d]  dest [size %d, used %d]" src.Size src.Used dest.Size dest.Used
 
   if src.Used > (dest.Size - dest.Used)
   then None 
