@@ -13,16 +13,6 @@ let grid = Array2D.init width height (fun x y ->
   | '.' -> Space
   | num -> num |> string |> int |> Number)
 
-let numbers = 
-  [|
-    for y = 0 to height-1 do
-      for x = 0 to width-1 do
-        match grid.[x, y] with
-        | Number n -> yield n, (x, y)
-        | _ -> ()
-  |]
-  |> Map.ofArray
-
 open System.Collections.Generic
 
 let findShortestPath start target =
@@ -33,8 +23,7 @@ let findShortestPath start target =
     paths
     |> Seq.collect (fun ((x, y), moves) -> 
       [ x-1, y; x+1, y; x, y-1; x, y+1 ]
-      |> Seq.filter (fun (x', y') ->
-        grid.[x', y'] <> Wall && cache.Add(x', y'))
+      |> Seq.filter (fun (x', y') -> grid.[x', y'] <> Wall && cache.Add(x', y'))
       |> Seq.map (fun (x', y') -> (x', y'), moves+1))
     |> Seq.toArray
     |> function
@@ -43,6 +32,16 @@ let findShortestPath start target =
   )
   |> Seq.collect id
   |> Seq.pick (fun (pos, moves) -> if pos = target then Some moves else None)
+
+let numbers = 
+  [|
+    for y = 0 to height-1 do
+      for x = 0 to width-1 do
+        match grid.[x, y] with
+        | Number n -> yield n, (x, y)
+        | _ -> ()
+  |]
+  |> Map.ofArray
 
 let pairDistances =
   [|
