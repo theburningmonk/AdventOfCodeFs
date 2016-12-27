@@ -72,5 +72,3 @@ let part1 =
     |> Seq.take 1000
     |> Seq.chunkBySize 2
     |> Seq.forall (fun [| a; b |] -> a = 0 && b = 1))
-
-let _ = Inc ""
