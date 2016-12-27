@@ -42,30 +42,28 @@ let execute initValues (instructions : Instruction[]) =
       match registers.TryGetValue reg with
       | true, n -> n
       | _       -> 0
-
-  let rec loop idx = seq {
-    if idx >= instructions.Length then ()
-    else 
+  
+  seq {
+    let mutable idx = 0
+    while idx < instructions.Length do
       match instructions.[idx] with
       | Cpy (n, Reg dest) -> 
         registers.[dest] <- fetch n
-        yield! loop (idx+1)
+        idx <- idx + 1
       | Inc reg ->
         registers.[reg] <- registers.[reg] + 1
-        yield! loop (idx+1)
+        idx <- idx + 1
       | Dec reg ->
         registers.[reg] <- registers.[reg] - 1
-        yield! loop (idx+1)
-      | Jnz (n, offset) when fetch n <> 0 ->
-        yield! loop (idx+fetch offset)
+        idx <- idx + 1
+      | Jnz (n, offset) when fetch n <> 0 -> 
+        idx <- idx + fetch offset
       | Out n ->
         yield fetch n
-        yield! loop (idx+1)
+        idx <- idx + 1
       | _ -> 
-        yield! loop (idx+1)
+        idx <- idx + 1
   }
-  
-  loop 0
 
 let part1 = 
   Seq.initInfinite id
